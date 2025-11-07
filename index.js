@@ -121,15 +121,19 @@ const getAndPrintGitHubUserProfile = async (username) =>{
 
 const fetchGithubUsers = async (userNames) =>{
     try {
-        const urls = "";
-        const data = await urls.map (userNames => connect(`${urlUser}/${userNames}`));
-        console.log(data);
-        Promise.all(data)
-            .then((results) => {
-                console.log(results);
-            }).catch((errores) => {
-                console.log(errores)
-            });
+        //hacemos un mapeado de los users
+        const promesas = userNames.map(userName => connect(`${urlUser}/${userName}`));
+        //manejamos todas las promesas antes de continuar
+        const resultados = await Promise.all(promesas);
+        
+        //conprobacion de que esten las respuestas
+        /*resultados.forEach(usuario => {
+            console.log('URL del repositorio:', usuario.html_url);
+            console.log('Nombre del usuario:', usuario.name);
+        });*/
+
+        //enviamos las promesas resueltas
+        return resultados;
     } catch (error) {
         console.log(error);
     }
